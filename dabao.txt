@@ -1,0 +1,9 @@
+pyinstaller ^
+  --noconsole ^
+  --onefile ^
+  --clean ^
+  --name MediaPlayer ^
+  --add-binary "vlc\libvlc.dll;vlc" ^
+  --add-binary "vlc\libvlccore.dll;vlc" ^
+  --add-data "vlc\plugins;vlc\plugins" ^
+  mediaPlayer.py
