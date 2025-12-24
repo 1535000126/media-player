@@ -21,6 +21,15 @@ CSV_FILE = "time_ranges.csv"
 SEGMENTS_DIR = Path("segments")
 ORDER_FILE = "order.txt"
 
+import os
+
+if getattr(sys, 'frozen', False):
+    # exe 运行时
+    base = sys._MEIPASS
+    os.environ["VLC_PLUGIN_PATH"] = os.path.join(base, "vlc", "plugins")
+else:
+    # 源码运行时（Windows VLC 默认路径）
+    os.environ["VLC_PLUGIN_PATH"] = r"C:\Program Files\VideoLAN\VLC\plugins"
 
 # =====================
 # 时间工具
