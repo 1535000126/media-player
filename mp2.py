@@ -806,15 +806,29 @@ class MainWindow(QMainWindow):
         if not self.running or self.in_interrupt:
             return
 
-        active = self.find_active_segment()
-        if not active:
+        now_seg = self.find_active_segment()
+
+        # 情况 1：当前没有任何 segment 在播
+        if self.current_segment is None:
+            if now_seg is not None:
+                self.start_segment(now_seg)
             return
 
-        if self.current_segment != active:
-            if self.current_segment and self.graceful_switch_box.isChecked():
-                self.waiting_next_segment = active
-            else:
-                self.start_segment(active)
+        # 情况 2：还在同一个 segment
+        if now_seg == self.current_segment:
+            return
+
+        # 情况 3：已经不在当前 segment 的时间范围了
+        if now_seg is None:
+            # 不强制 stop，让它播完 or 自然结束
+            return
+
+        # 情况 4：切到新的 segment
+        if self.graceful_switch_box.isChecked():
+            self.waiting_next_segment = now_seg
+        else:
+            self.start_segment(now_seg)
+
 
     def start_segment(self, seg: tuple[int, int]):
         self.current_segment = seg
